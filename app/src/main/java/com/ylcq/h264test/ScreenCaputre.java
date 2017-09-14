@@ -96,7 +96,7 @@ public class ScreenCaputre {
         MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
         format.setInteger(KEY_BIT_RATE, width * height);
-        format.setInteger(KEY_FRAME_RATE, 15);
+        format.setInteger(KEY_FRAME_RATE, 20);
         format.setInteger(KEY_I_FRAME_INTERVAL, 1);
         MediaCodec vencoder = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC);
         vencoder.configure(format, null, null, CONFIGURE_FLAG_ENCODE);
@@ -170,6 +170,7 @@ public class ScreenCaputre {
             if (null != screenCaputreListener) {
                 screenCaputreListener.onImageData(bytes);
             }
+//            Log.v(TAG, "视频数据  " + Arrays.toString(bytes));
         }
     }
 }

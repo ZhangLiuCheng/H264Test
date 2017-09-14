@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private SurfaceView mSurfaceView;
     private MediaCodec mCodec;
 
+    private AACDecoderUtil aacDecoderUtil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +48,15 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         mSurfaceView.getHolder().setFixedSize(dm.widthPixels, dm.heightPixels);
         mSurfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
     }
 
     public void start(View view) {
         startServer();
         initDecoder();
+
+//        aacDecoderUtil = new AACDecoderUtil();
+//        aacDecoderUtil.prepare();
     }
 
     InputStream is;
@@ -74,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
                         DataInputStream dis = new DataInputStream(is);
                         dis.readFully(buf);
                         onFrame(buf, 0, buf.length);
+
+//                        Log.v(TAG, "音频数据 " + Arrays.toString(buf));
+//                        aacDecoderUtil.decode(buf, 0, buf.length);
                     }
                 } catch (Exception ex) {
 
@@ -96,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
             mCodec = MediaCodec.createDecoderByType(MIME_TYPE);
 
             final MediaFormat format = MediaFormat.createVideoFormat(MIME_TYPE, VIDEO_WIDTH, VIDEO_HEIGHT);
-            format.setInteger(MediaFormat.KEY_BIT_RATE,  VIDEO_WIDTH * VIDEO_HEIGHT / 2);
-            format.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
+            format.setInteger(MediaFormat.KEY_BIT_RATE,  VIDEO_WIDTH * VIDEO_HEIGHT);
+            format.setInteger(MediaFormat.KEY_FRAME_RATE, 20);
             format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
 
             // 横屏
@@ -137,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         // Get output buffer index
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
         int outputBufferIndex = mCodec.dequeueOutputBuffer(bufferInfo, 100);
+
 
         while (outputBufferIndex >= 0) {
             mCodec.releaseOutputBuffer(outputBufferIndex, true);

@@ -1,6 +1,7 @@
 package com.ylcq.h264test;
 
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements ScreenCaputre.Scr
     private final static String TAG = MainActivity.class.getSimpleName();
 
     private ScreenCaputre screenCaputre;
+    private VoiceRecoder voiceRecoder;
 
     private static final int REQUEST_CODE = 1;
     private MediaProjectionManager mMediaProjectionManager;
@@ -51,6 +53,25 @@ public class MainActivity extends AppCompatActivity implements ScreenCaputre.Scr
     }
 
     public void start(View view) {
+        /*
+        voiceRecoder = new VoiceRecoder(new VoiceRecoder.VoiceRecoderListener() {
+            @Override
+            public void onVoiceData(byte[] buf) {
+                if (null != os) {
+                    try {
+                        byte[] bytes = new byte[buf.length + 4];
+                        byte[] head = intToBuffer(buf.length);
+                        System.arraycopy(head, 0, bytes, 0, head.length);
+                        System.arraycopy(buf, 0, bytes, head.length, buf.length);
+                        os.write(bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        voiceRecoder.start();
+        */
         if (null == screenCaputre) {
             prepareScreen();
         } else {
