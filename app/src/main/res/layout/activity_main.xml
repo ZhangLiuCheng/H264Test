@@ -20,4 +20,10 @@
         android:layout_margin="10dp"
         android:text="stop"
         android:onClick="stop"/>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"/>
 </LinearLayout>

@@ -170,7 +170,7 @@ public class ScreenCaputre {
             if (null != screenCaputreListener) {
                 screenCaputreListener.onImageData(bytes);
             }
-            Log.v(TAG, "视频数据  " + Arrays.toString(bytes));
+//            Log.v(TAG, "视频数据  " + Arrays.toString(bytes));
         }
     }
 }

@@ -10,11 +10,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -52,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start(View view) {
-        startServer();
+//        startServer();
+        startServer1();
         initDecoder();
 
 //        aacDecoderUtil = new AACDecoderUtil();
@@ -96,6 +102,56 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void startServer1() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+                try {
+                    URI url = new URI("ws://192.168.81.233:10002");
+                    MyWebSocketClient myWebSocketClient = new MyWebSocketClient(url);
+                    myWebSocketClient.connectBlocking();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+//            }
+//        }).start();
+    }
+    private class MyWebSocketClient extends WebSocketClient {
+
+        public MyWebSocketClient(URI serverURI) {
+            super(serverURI);
+        }
+
+        @Override
+        public void onOpen(ServerHandshake serverHandshake) {
+            Log.v(TAG, "onOpen    ");
+        }
+
+        @Override
+        public void onMessage(String s) {
+            Log.v(TAG, "onMessage    " + s);
+        }
+
+        @Override
+        public void onMessage(ByteBuffer bytes) {
+            byte[] buf = new byte[bytes.remaining()];
+            bytes.get(buf);
+            onFrame(buf, 0, buf.length);
+
+        }
+
+        @Override
+        public void onClose(int i, String s, boolean b) {
+            Log.v(TAG, "onClose    ");
+        }
+
+        @Override
+        public void onError(Exception e) {
+            Log.v(TAG, "onError    " + e);
+        }
+    }
+
+
     public static int bufferToInt(byte[] src) {
         int value;
         value = (int) ((src[0] & 0xFF)
@@ -137,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         // Get input buffer index
         ByteBuffer[] inputBuffers = mCodec.getInputBuffers();
         int inputBufferIndex = mCodec.dequeueInputBuffer(100);
-        Log.v(TAG, " inputBufferIndex  " + inputBufferIndex);
+//        Log.v(TAG, " inputBufferIndex  " + inputBufferIndex);
 
         if (inputBufferIndex >= 0) {
             ByteBuffer inputBuffer = inputBuffers[inputBufferIndex];
