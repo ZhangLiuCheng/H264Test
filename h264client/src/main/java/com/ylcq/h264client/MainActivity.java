@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String TAG = "H264";
+    private final static String TAG = "H264Client";
 
     private final static String MIME_TYPE = "video/avc"; // H.264 Advanced Video
 //    private final static int VIDEO_WIDTH = 1280;
@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Socket socket = new Socket("192.168.81.197", 10001);
+//                    Socket socket = new Socket("192.168.81.197", 10001);
+                    Socket socket = new Socket("192.168.81.233", 10001);
                     is = socket.getInputStream();
                     Log.v(TAG, "连接成功");
 
@@ -73,13 +74,16 @@ public class MainActivity extends AppCompatActivity {
                         byte[] head = new byte[4];
                         is.read(head);
                         int len = bufferToInt(head);
-                        Log.v(TAG, "read len " + len);
+//                        Log.v(TAG, "read len " + len);
 
                         byte[] buf = new byte[len];
-                        Log.v(TAG, "read content " + buf.length);
+//                        Log.v(TAG, "read content " + buf.length);
 
                         DataInputStream dis = new DataInputStream(is);
                         dis.readFully(buf);
+
+                        Log.v(TAG, "read content " + Arrays.toString(buf));
+
                         onFrame(buf, 0, buf.length);
 
 //                        Log.v(TAG, "音频数据 " + Arrays.toString(buf));
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             // 竖屏
             byte[] header_sps = {0, 0, 0, 1, 103, 66, -128, 31, -38, 2, -48, 40, 104, 6, -48, -95, 53};
             byte[] header_pps = {0, 0 ,0, 1, 104, -50, 6, -30};
-
+//
             format.setByteBuffer("csd-0", ByteBuffer.wrap(header_sps));
             format.setByteBuffer("csd-1", ByteBuffer.wrap(header_pps));
             mCodec.configure(format, mSurfaceView.getHolder().getSurface(),
