@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements ScreenCaputre.Scr
 
     @Override
     public void onImageData(byte[] buf) {
-        Log.v(TAG, "onImageData  " + buf.length + "  ------  " + os);
+//        Log.v(TAG, "onImageData  " + buf.length + "  ------  " + os);
         if (null != os) {
             try {
                 byte[] bytes = new byte[buf.length + 4];
